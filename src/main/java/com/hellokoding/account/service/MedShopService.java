@@ -19,7 +19,7 @@ public interface MedShopService {
     
     List<Product> getAllProducts();
     
-    void addProductToShoppingCart(ShoppingCart shoppingCart,String pzn);
+    void addProductToShoppingCart(ShoppingCart shoppingCart,String pzn,int amount);
     
     void changeProductNumberAtShoppingCart(ShoppingCart shoppingCart,String pzn, int i);
     

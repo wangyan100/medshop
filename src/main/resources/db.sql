@@ -92,6 +92,15 @@ CREATE TABLE `orderdetail` (
   `amount` int(11) DEFAULT NULL
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tourguide`;
+CREATE TABLE `tourguide` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  `tourguideid` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `chinesename` varchar(255) DEFAULT NULL,
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 

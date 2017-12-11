@@ -5,10 +5,12 @@
  */
 package com.hellokoding.account.service;
 
+import com.hellokoding.account.model.TourguideExcelLine;
 import com.hellokoding.account.model.ExcelLine;
 import com.hellokoding.account.model.Order;
 import com.hellokoding.account.model.OrderDetail;
 import com.hellokoding.account.model.Product;
+import com.hellokoding.account.model.Tourguide;
 import com.hellokoding.account.repository.MedShopDao;
 import java.io.File;
 import java.io.FileInputStream;
@@ -206,7 +208,7 @@ public class FileServiceImpl implements FileService {
         line.add("Name des Kunden游客:");
         line.add(order.getTouristName());
         lists.add(line);
-        
+
         line = new java.util.ArrayList<String>();
         line.add("");
         lists.add(line);
@@ -241,7 +243,6 @@ public class FileServiceImpl implements FileService {
                     cell.setCellValue((String) field);
                 }
             }
-
         }
         sheet.getRow(0).getCell(1).setCellStyle(my_style);
         sheet.getRow(0).getCell(3).setCellStyle(my_style);
@@ -258,13 +259,102 @@ public class FileServiceImpl implements FileService {
         sheet.autoSizeColumn(2);
         sheet.autoSizeColumn(3);
         sheet.autoSizeColumn(4);
-        
-          // by this way will print sheet content into A4 size
+
+        // by this way will print sheet content into A4 size
         sheet.getPrintSetup().setPaperSize(
                 XSSFPrintSetup.A4_PAPERSIZE);
         sheet.setFitToPage(true);
         return workbook;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional
+    public boolean loadTourguideFile2Database(InputStream inputexcel) throws Exception {
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean loaded = false;
+        //InputStream productexcel = null;
+
+        try {
+            // WorkbookFactory.create(productexcel); 
+            Workbook wb = WorkbookFactory.create(inputexcel);
+            Sheet sheet = wb.getSheetAt(0);       // first sheet
+            //Iterate through each rows from first sheet
+            Iterator<Row> rowIterator = sheet.iterator();
+            int rowCount = 0;
+            while (rowIterator.hasNext()) {
+
+                Row row = rowIterator.next();
+                if (rowCount++ == 0) {
+                    //skip first line
+                    continue;
+                }
+
+                TourguideExcelLine line = new TourguideExcelLine();
+                line.setRowCount(rowCount);
+                for (int cellCount = 1; cellCount <= row.getLastCellNum(); cellCount++) {
+
+                    Cell cell = row.getCell(cellCount - 1, Row.CREATE_NULL_AS_BLANK);
+
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_FORMULA:
+                            logger.debug("rowCount : " + rowCount + " cellCount: " + cellCount + " Formula  " + cell.getNumericCellValue());
+                            break;
+
+                        case Cell.CELL_TYPE_NUMERIC:
+                            if (cellCount == 1) {
+                                cell.setCellType(Cell.CELL_TYPE_STRING);
+                                //it is PZN should be string format
+                                logger.debug("rowCount : " + rowCount + " cellCount: " + cellCount + " String " + cell.getStringCellValue());
+                                line.setTourguideid(cell.getStringCellValue().trim());
+                            }
+                            break;
+
+                        case Cell.CELL_TYPE_STRING:
+                            logger.debug("rowCount : " + rowCount + " cellCount: " + cellCount + " STRING " + cell.getStringCellValue());
+                            if (cellCount == 1) {
+                                line.setTourguideid(cell.getStringCellValue().trim());
+                            } else if (cellCount == 2) {
+                                line.setName(cell.getStringCellValue().trim());
+                            } else if (cellCount == 3) {
+                                line.setChinesename(cell.getStringCellValue().trim());
+                            }
+                            break;
+
+                    }
+                }
+
+                // one line is convert to Excelline
+                if (line.getTourguideid() != null) {
+
+                    Tourguide tourguide = medShopDao.getTourguideByTourguideid(line.getTourguideid());
+                    if (tourguide != null) {
+                        logger.debug(line.getTourguideid() + "xxx is update !!!");
+                        //it is update
+                        tourguide.setChineseName(line.getChinesename());
+                        tourguide.setName(line.getName());
+                        medShopDao.updateTourGuide(tourguide);
+                    } else {
+                        //it is new one
+                        tourguide = new Tourguide();
+                        tourguide.setTourguideid(line.getTourguideid());
+                        tourguide.setChineseName(line.getChinesename());
+                        tourguide.setName(line.getName());
+                        medShopDao.saveTourGuide(tourguide);
+                    }
+
+                }
+
+            }
+
+            loaded = true;
+
+        } catch (Exception e) {
+            loaded = false;
+            logger.error(e.getMessage(), e);
+        }
+
+        return loaded;
     }
 
 }

@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +28,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
+    @OrderBy("id ASC")
     private List<OrderDetail> orderdetails;
     private String shopname;
     private java.sql.Date pickupDate;

@@ -39,7 +39,7 @@ public class MedShopServiceImpl implements MedShopService {
 
     @Override
     @Transactional
-    public void addProductToShoppingCart(ShoppingCart shoppingCart, String pzn) {
+    public void addProductToShoppingCart(ShoppingCart shoppingCart, String pzn, int amount) {
         boolean found = false;
         if (shoppingCart.getOrders() == null) {
             shoppingCart.setOrders(new HashMap<Product, Integer>());
@@ -49,7 +49,7 @@ public class MedShopServiceImpl implements MedShopService {
             Product product = entry.getKey();
             if (product.getPzn().equalsIgnoreCase(pzn)) {
                 found = true;
-                shoppingCart.getOrders().put(product, entry.getValue() + 1);
+                shoppingCart.getOrders().put(product, entry.getValue() + amount);
             }
             //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
@@ -57,7 +57,7 @@ public class MedShopServiceImpl implements MedShopService {
         if (found == false) {
             //
             Product product = medShopDao.getProductByPZN(pzn);
-            shoppingCart.getOrders().put(product, 1);
+            shoppingCart.getOrders().put(product, amount);
         }
 
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

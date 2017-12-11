@@ -114,7 +114,14 @@ public class UserController {
         String pzn = request.getParameter("pzn");
 
         if (action != null && action.contains("addShoppingCart") && pzn != null) {
-            medShopService.addProductToShoppingCart((ShoppingCart) session.getAttribute("shoppingCart"), pzn);
+            String amountStr = request.getParameter("amount");
+            logger.info(amountStr);
+            //default value 1
+            int amount = 1;
+            if (amountStr != null) {
+                amount = Integer.parseInt(amountStr);
+            }
+            medShopService.addProductToShoppingCart((ShoppingCart) session.getAttribute("shoppingCart"), pzn, amount);
             logger.debug("Orders: " + shoppingCart.getOrders());
             //logger.debug("shoppingCart orders"+((ShoppingCart)session.getAttribute("shoppingCart").);
         }
@@ -195,6 +202,17 @@ public class UserController {
             if (isSucceed) {
                 return "redirect:/welcome";
             }
+        }
+        return "upload";
+    }
+
+    @RequestMapping(value = {"/uploadtourguideProcess"}, method = RequestMethod.POST)
+    public String uploadtourguideProcess(@RequestParam("file") MultipartFile file,
+            RedirectAttributes redirectAttributes, Model model) throws Exception {
+        if (!file.isEmpty() && file.getOriginalFilename().toLowerCase().contains(".xls")) {
+            logger.debug("fileoriginalname###: " + file.getOriginalFilename());
+            fileService.loadTourguideFile2Database(file.getInputStream());
+                  
         }
         return "upload";
     }

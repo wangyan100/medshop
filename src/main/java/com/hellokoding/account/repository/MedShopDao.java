@@ -8,6 +8,7 @@ package com.hellokoding.account.repository;
 import com.hellokoding.account.model.Order;
 import com.hellokoding.account.model.OrderDetail;
 import com.hellokoding.account.model.Product;
+import com.hellokoding.account.model.Tourguide;
 import java.sql.Date;
 import java.util.List;
 
@@ -20,6 +21,10 @@ public interface MedShopDao {
     void saveProduct(Product product);
 
     void updateProduct(Product product);
+    
+    void saveTourGuide(Tourguide tourguide);
+    
+    void updateTourGuide(Tourguide tourguide);
 
     void saveOrder(Order order);
     
@@ -30,6 +35,8 @@ public interface MedShopDao {
     void updateOrderDetail(OrderDetail orderDetail);
 
     Product getProductByPZN(String pzn);
+    
+    Tourguide getTourguideByTourguideid(String tourguideid);
 
     java.util.List<Product> getAllProducts();
 

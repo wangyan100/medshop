@@ -24,6 +24,19 @@
         <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     </head>
     <body>
+        <script>
+                function confirmSubmit(element) {
+                var amount;
+                $(element).attr('href', function () {
+                    amount =$(element).parent().prev().find('input').val();
+                    this.href = this.href+'&amount=' + amount;
+                });
+                
+                return ! isNaN(amount)
+                //return confirm("add Prouction Amount "+amount);
+            }
+            
+        </script>
         <div class="container">
 
             <c:if test="${pageContext.request.userPrincipal.name != null}">
@@ -64,7 +77,10 @@
                                 <td>${product.unit}</td>
                                 <td>${product.price}</td>
                                 <td>
-                                    <a href="${contextPath}/welcome?action=addShoppingCart&pzn=${product.pzn}">
+                                    <input name="amount" type="number" value=1  min="1" max="999"/>
+                                </td>
+                                <td>
+                                    <a onclick="confirmSubmit(this)" href="${contextPath}/welcome?action=addShoppingCart&pzn=${product.pzn}">
                                         <button type="button" class="btn btn-primary">Add to ShoppingCart</button>
                                     </a>
                                 </td>

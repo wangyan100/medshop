@@ -18,6 +18,8 @@ public interface FileService {
     
     boolean loadFile2Database(InputStream inputexcel)throws Exception;
     
+    boolean loadTourguideFile2Database(InputStream inputexcel)throws Exception;
+    
     XSSFWorkbook createOrderDetail(long orderid);
     
 }

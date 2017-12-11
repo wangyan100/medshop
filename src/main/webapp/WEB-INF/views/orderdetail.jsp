@@ -160,6 +160,9 @@
 
             <div>
                 <span>
+                    <a onClick="javascript:window.open('mailto:mail@domain.com', 'mail');event.preventDefault()" href="mailto:mail@domain.com">
+                    <button type="button" class="btn btn-primary">Send Email  </button>
+                    </a>
                     <a href="${contextPath}/orderdetaildownload?id=${order.id}&ordernumber=${order.orderNumber}">
                         <button type="button" class="btn btn-primary">Download Order  </button>
                     </a>

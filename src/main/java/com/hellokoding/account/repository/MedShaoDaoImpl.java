@@ -8,6 +8,7 @@ package com.hellokoding.account.repository;
 import com.hellokoding.account.model.Order;
 import com.hellokoding.account.model.OrderDetail;
 import com.hellokoding.account.model.Product;
+import com.hellokoding.account.model.Tourguide;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -124,6 +125,29 @@ public class MedShaoDaoImpl implements MedShopDao {
                 .setParameter("toDate", toDate)
                 .getResultList();
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void saveTourGuide(Tourguide tourguide) {
+        entityManager.persist(tourguide);
+    }
+
+    @Override
+    public void updateTourGuide(Tourguide tourguide) {
+        entityManager.merge(tourguide);
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Tourguide getTourguideByTourguideid(String tourguideid) {
+        Tourguide tourguide = null;
+        List<Tourguide> list = entityManager.createQuery("SELECT t FROM Tourguide t WHERE t.tourguideid=:tourguideid")
+                .setParameter("tourguideid", tourguideid).getResultList();
+        if (!list.isEmpty()) {
+            tourguide = list.get(0);
+        }
+        return tourguide;
+
     }
 
 }
