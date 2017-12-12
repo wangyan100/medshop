@@ -111,8 +111,7 @@ public class MedShopServiceImpl implements MedShopService {
         for (Map.Entry<Product, Integer> entry : shoppingCart.getOrders().entrySet()) {
             Product product = entry.getKey();
             int amount = entry.getValue();
-            product.getPrice().substring(0, product.getPrice().indexOf("€"));
-            float price = Float.parseFloat(product.getPrice().substring(0, product.getPrice().indexOf("€")));
+            float price = Float.parseFloat(product.getPrice());
             totalPrice = (price * amount) + totalPrice;
 
             OrderDetail orderDetail = new OrderDetail();
@@ -200,8 +199,7 @@ public class MedShopServiceImpl implements MedShopService {
             foundOrderDetail.setUnit(product.getUnit());
             foundOrderDetail.setOrder(order);
 
-            product.getPrice().substring(0, product.getPrice().indexOf("€"));
-            float price = Float.parseFloat(product.getPrice().substring(0, product.getPrice().indexOf("€")));
+            float price = Float.parseFloat(product.getPrice());
             increasePrice = (price * amount) + increasePrice;
             medShopDao.saveOrderDetail(foundOrderDetail);
             order.setTotalPrice(order.getTotalPrice() + increasePrice);
@@ -210,7 +208,7 @@ public class MedShopServiceImpl implements MedShopService {
         } else {
             //it is a update for existing one
             float increasePrice = 0.0f;
-            float price = Float.parseFloat(foundOrderDetail.getPrice().substring(0, foundOrderDetail.getPrice().indexOf("€")));
+            float price = Float.parseFloat(foundOrderDetail.getPrice());
             increasePrice = (price * amount) + increasePrice;
             foundOrderDetail.setAmount(foundOrderDetail.getAmount() + amount);
             medShopDao.updateOrderDetail(foundOrderDetail);
@@ -239,7 +237,7 @@ public class MedShopServiceImpl implements MedShopService {
         if (foundOrderDetail != null && (foundOrderDetail.getAmount() >= amount)) {
 
             //it is a update for existing one
-            float price = Float.parseFloat(foundOrderDetail.getPrice().substring(0, foundOrderDetail.getPrice().indexOf("€")));
+            float price = Float.parseFloat(foundOrderDetail.getPrice());
 
             if (foundOrderDetail.getAmount() > amount) {
                 //update this OrderDetail

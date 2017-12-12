@@ -95,6 +95,9 @@ public class FileServiceImpl implements FileService {
                                 //it is PZN should be string format
                                 logger.debug("rowCount : " + rowCount + " cellCount: " + cellCount + " String " + cell.getStringCellValue());
                                 line.setPzn(cell.getStringCellValue().trim());
+                            }else if (cellCount == 5) {
+                                Double.toString(cell.getNumericCellValue());
+                                line.setPrice( Double.toString(cell.getNumericCellValue()));
                             }
                             break;
 

@@ -16,13 +16,32 @@
 
         <title>ShoppingCart</title>
         <link  href="${contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
-        <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">        
+        <!--link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"-->
         <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
         <script src="${contextPath}/resources/js/jquery-1.12.4.min.js"></script>
         <script src="${contextPath}/resources/js/jquery-ui.js"></script>
         <script src="${contextPath}/resources/js/jquery.validate.min.js"></script>
-        <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+        <!--script src="${contextPath}/resources/js/bootstrap.min.js"></script-->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
         <script>
+
+            $(document).keyup(function (e) {
+                console.log("key up ##############")
+                if ($("#tourGuideID:focus") && (e.keyCode === 13)) {
+
+
+                    $('#tourGuideName').val('Test Name');
+                    $('#tourGuideID').val('11122');
+                    e.stopPropagation()
+                    // e.preventDefault();
+                }
+                e.prevtDefault();
+            });
+
+
 
             function addURL(element)
             {
@@ -45,7 +64,7 @@
 
 
             $("#submit").click(function (event) {
-                if (!confirm("confirm x order"))
+                if (!confirm("confirm  order"))
                     event.preventDefault();
             });
 
@@ -149,6 +168,7 @@
                                         ReiseleiterName: <input type="text" name="tourGuideName" value="${tourGuideName}" id="tourGuideName"/>
                                     </td>
                                     <td> 
+
                                         Reiseleiter ID : <input type="text" name="tourGuideID" value="${tourGuideID}" id="tourGuideID"  />
                                     </td>
                                     <td> 
