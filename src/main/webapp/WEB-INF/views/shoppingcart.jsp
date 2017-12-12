@@ -13,7 +13,6 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
         <meta name="author" content="">
-
         <title>ShoppingCart</title>
         <link  href="${contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">        
@@ -31,14 +30,16 @@
             $(document).keyup(function (e) {
                 console.log("key up ##############")
                 if ($("#tourGuideID:focus") && (e.keyCode === 13)) {
-
-
-                    $('#tourGuideName').val('Test Name');
+                    var pathname = window.location.pathname; // Returns path only
+                    var url = window.location.href;     // Returns full URL
+                    var context=url.replace(pathname,'');
+                    //context = localhost:8080/
+                    $('#tourGuideName').val('Test Name context' + context);
                     $('#tourGuideID').val('11122');
                     e.stopPropagation()
-                    // e.preventDefault();
+                    e.preventDefault();
                 }
-                e.prevtDefault();
+                e.preventDefault();
             });
 
 
