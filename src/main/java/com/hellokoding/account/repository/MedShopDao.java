@@ -45,6 +45,7 @@ public interface MedShopDao {
     int getTodayOrderNumber();
 
     Order getOrder(long id);
+    
 
     void updateOrder(Order order);
     

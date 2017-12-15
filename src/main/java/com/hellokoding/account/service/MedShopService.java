@@ -8,6 +8,7 @@ package com.hellokoding.account.service;
 import com.hellokoding.account.model.Order;
 import com.hellokoding.account.model.Product;
 import com.hellokoding.account.model.ShoppingCart;
+import com.hellokoding.account.model.Tourguide;
 import java.sql.Date;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public interface MedShopService {
     void removeProductFromOrder(long orderid,String pzn, int amount);
     
     List queryReport(String sql, Date fromDate , Date toDate);
+    
+    Tourguide getTourguideByTourguideid(String tourguideid);
     
     
     

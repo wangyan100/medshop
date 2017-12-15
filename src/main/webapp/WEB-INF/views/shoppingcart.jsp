@@ -30,16 +30,34 @@
             $(document).keyup(function (e) {
                 console.log("key up ##############")
                 if ($("#tourGuideID:focus") && (e.keyCode === 13)) {
-                    var pathname = window.location.pathname; // Returns path only
-                    var url = window.location.href;     // Returns full URL
-                    var context=url.replace(pathname,'');
-                    //context = localhost:8080/
-                    $('#tourGuideName').val('Test Name context' + context);
-                    $('#tourGuideID').val('11122');
+
                     e.stopPropagation()
                     e.preventDefault();
+
+                    var pathname = window.location.pathname; // Returns path only
+                    var url = window.location.href;     // Returns full URL
+                    var context = url.replace(pathname, '');
+                    url = context + '/querytourguide' + '?tourguideid=' + $('#tourGuideID').val();
+                    console.log(url);
+                    //context = localhost:8080/
+
+
+                    $.ajax({
+                        url: url,
+                        timeout: 100000,
+                        success: function (data) {
+                            console.log("SUCCESS: ", data);
+                            $('#tourGuideName').val(data.name+ data.chineseName);
+                            $('#tourGuideID').val(data.tourguideid);
+                        },
+                        error: function (e) {
+                            console.log("ERROR: ", e);
+                        },
+                        done: function (e) {
+                            console.log("DONE");
+                        }
+                    });
                 }
-                e.preventDefault();
             });
 
 

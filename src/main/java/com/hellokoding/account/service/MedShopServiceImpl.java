@@ -9,6 +9,7 @@ import com.hellokoding.account.model.Order;
 import com.hellokoding.account.model.OrderDetail;
 import com.hellokoding.account.model.Product;
 import com.hellokoding.account.model.ShoppingCart;
+import com.hellokoding.account.model.Tourguide;
 import com.hellokoding.account.repository.MedShopDao;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -267,6 +268,13 @@ public class MedShopServiceImpl implements MedShopService {
         
        return medShopDao.queryReport(sql, fromDate, toDate);
        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional
+    public Tourguide getTourguideByTourguideid(String tourguideid) {
+        return medShopDao.getTourguideByTourguideid(tourguideid);
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

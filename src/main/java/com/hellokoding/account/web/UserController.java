@@ -3,6 +3,7 @@ package com.hellokoding.account.web;
 import com.hellokoding.account.model.Product;
 import com.hellokoding.account.model.ShoppingCart;
 import com.hellokoding.account.model.StatisticReport;
+import com.hellokoding.account.model.Tourguide;
 import com.hellokoding.account.model.User;
 import com.hellokoding.account.service.FileService;
 import com.hellokoding.account.service.MedShopService;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -40,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
@@ -212,7 +216,7 @@ public class UserController {
         if (!file.isEmpty() && file.getOriginalFilename().toLowerCase().contains(".xls")) {
             logger.debug("fileoriginalname###: " + file.getOriginalFilename());
             fileService.loadTourguideFile2Database(file.getInputStream());
-                  
+
         }
         return "upload";
     }
@@ -223,6 +227,14 @@ public class UserController {
 
         model.addAttribute("orders", medShopService.getAllOrders());
         return "orderlist";
+    }
+
+    @RequestMapping(value = {"/querytourguide"}, method = RequestMethod.GET)
+    @ResponseBody
+    public Tourguide querytourguide(@RequestParam("tourguideid") String tourguideid) {
+        
+        return medShopService.getTourguideByTourguideid(tourguideid);
+        
     }
 
     @RequestMapping(value = {"/report"}, method = RequestMethod.POST)
