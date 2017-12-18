@@ -5,32 +5,23 @@ import com.hellokoding.account.model.ShoppingCart;
 import com.hellokoding.account.model.StatisticReport;
 import com.hellokoding.account.model.Tourguide;
 import com.hellokoding.account.model.User;
-import com.hellokoding.account.service.FileService;
-import com.hellokoding.account.service.MedShopService;
-import com.hellokoding.account.service.SecurityService;
-import com.hellokoding.account.service.UserService;
+import com.hellokoding.account.service.*;
 import com.hellokoding.account.validator.UserValidator;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Map;
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Response;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.Document;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,6 +55,16 @@ public class UserController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private String mailTo;
+
+    private static final String MAIL_SUBJECT = "medshop order";
+
+    private static final String MAIL_CONTENT = "Please find the order in the attachment.";
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -464,5 +465,29 @@ public class UserController {
         //model.addAttribute("order", medShopService.getOrder(id));
         response.flushBuffer();
         // return "orderdetail";
+    }
+
+    @RequestMapping(value = {"/orderdetailsendmail"}, method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody Response orderdetailsendmail(@RequestParam("id") long id, @RequestParam() String ordernumber,
+                                               RedirectAttributes redirectAttributes, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        File tempFile = null;
+        OutputStream outputStream = null;
+        try {
+            tempFile = File.createTempFile("mail-attachment-", ".xlsx");
+            outputStream = new BufferedOutputStream(new FileOutputStream(tempFile));
+            XSSFWorkbook document = fileService.createOrderDetail(id);
+            document.write(outputStream);
+            outputStream.flush();
+            mailService.sendMail(mailTo, MAIL_SUBJECT, MAIL_CONTENT, tempFile.getAbsolutePath());
+        } finally {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (tempFile != null) {
+                tempFile.delete();
+            }
+        }
+        return Response.ok().build();
     }
 }
