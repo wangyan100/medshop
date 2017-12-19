@@ -81,6 +81,30 @@
                 });
             });
 
+            $(document).ready(function(event) {
+                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                  jqXHR.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                });
+
+                $('#sendmail-button').click(function() {
+                    $.ajax({
+                        type: 'post',
+                        url: "${contextPath}/orderdetailsendmail",
+                        dataType : 'json',
+                        data: {
+                            id: "${order.id}",
+                            ordernumber: "${order.orderNumber}"
+                        }
+                    }).done(function(response) {
+                        console.log(response);
+                        alert("Email sent successfully!");
+                    }).fail(function(response) {
+                        console.log(response);
+                        alert("Failed to send email!");
+                    });
+                });
+            });
+
         </script>
     </head>
     <body>
@@ -160,8 +184,8 @@
 
             <div>
                 <span>
-                    <a onClick="javascript:window.open('mailto:mail@domain.com', 'mail');event.preventDefault()" href="mailto:mail@domain.com">
-                    <button type="button" class="btn btn-primary">Send Email  </button>
+                    <a id="sendmail-button">
+                        <button type="button" class="btn btn-primary">Send Email  </button>
                     </a>
                     <a href="${contextPath}/orderdetaildownload?id=${order.id}&ordernumber=${order.orderNumber}">
                         <button type="button" class="btn btn-primary">Download Order  </button>
