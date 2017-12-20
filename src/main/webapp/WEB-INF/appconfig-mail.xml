@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="localhost"/>
+        <property name="port" value="25"/>
+        <!--
+        <property name="username" value="user"/>
+        <property name="password" value="pass"/>
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+        -->
+    </bean>
+    <bean id="mailService" class="com.hellokoding.account.service.MailServiceImpl">
+        <constructor-arg ref="mailSender"></constructor-arg>
+        <constructor-arg type="java.lang.String" value="sender@localhost"></constructor-arg>
+    </bean>
+    <bean id="mailTo" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="receiver@localhost"></constructor-arg>
+    </bean>
+</beans>
