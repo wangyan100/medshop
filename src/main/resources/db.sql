@@ -98,8 +98,8 @@ CREATE TABLE `tourguide` (
   PRIMARY KEY (`id`),
   `tourguideid` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `chinesename` varchar(255) DEFAULT NULL,
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `chinesename` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
