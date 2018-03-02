@@ -1,0 +1,6 @@
+# import sql into database
+mysql -u username -p database_name < file.sql
+
+# create database
+ mysql -h host -u user -p menagerie
+Enter password: ********
